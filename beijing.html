@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中国地图</title>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="js/echarts.js"></script>
+  <script src="https://www.isqqw.com/dep/echarts/map/js/china.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts-map-chinajs@1.0.2/china.min.js"></script>
+
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* 移除默认样式 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 背景样式 */
+    body {
+      background-image: url('images/changcheng.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* 磨砂白覆盖层 */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      z-index: 1;
+    }
+
+    /* 导航栏样式 */
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      border: none;
+    }
+
+    .nav-items {
+      text-decoration: none;
+      color: #333;
+      font-size: 18px;
+      padding: 10px 15px;
+      transition: color 0.3s ease;
+      border: none;
+    }
+
+    .nav-items:hover {
+      color: white;
+    }
+
+    .nav-items.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    /* 搜索框样式 */
+    .search-container {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      width: 60%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column; /* 设置为垂直布局 */
+      align-items: center; /* 水平居中 */
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 25px;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(5px);
+      margin-bottom: 10px; /* 与图片的间距 */
+    }
+
+    .search-box:focus {
+      border-color: #666;
+    }
+
+    /* 搜索图片样式 */
+    .search-image {
+      top: 17%;
+      right: 1%;
+      width: 30px; /* 设置图片宽度 */
+      height: 30px; /* 设置图片高度 */
+      cursor: pointer; /* 鼠标指针样式 */
+    }
+
+    /* 悬浮按钮样式 */
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 25px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      font-size: 24px;
+    }
+
+    /* 悬浮窗口样式 */
+    #chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 500px; /* 增大宽度 */
+      height: 600px; /* 增大高度 */
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+    }
+
+    /* 关闭按钮样式 */
+    #close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    #main{
+      top:-3%;
+      z-index: 3; /* 确保图表位于最上层 */
+      position: relative; /* 确保子元素的绝对定位相对于此元素 */
+    }
+  </style>
+</head>
+
+<body>
+    <div id="main" style="width: 1650px;height:1000px;"></div>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('main'));
+
+      // 指定图表的配置项和数据
+      var allData = [{
+   name: '北京'
+}, {
+   name: '天津'
+}, {
+   name: '上海'
+}, {
+   name: '重庆'
+}, {
+   name: '河北'
+}, {
+   name: '河南'
+}, {
+   name: '云南'
+}, {
+   name: '辽宁'
+}, {
+   name: '黑龙江'
+}, {
+   name: '湖南'
+}, {
+   name: '安徽'
+}, {
+   name: '山东'
+}, {
+   name: '新疆'
+}, {
+   name: '江苏'
+}, {
+   name: '浙江'
+}, {
+   name: '江西'
+}, {
+   name: '湖北'
+}, {
+   name: '广西'
+}, {
+   name: '甘肃'
+}, {
+   name: '山西'
+}, {
+   name: '内蒙古'
+}, {
+   name: '陕西'
+}, {
+   name: '吉林'
+}, {
+   name: '福建'
+}, {
+   name: '贵州'
+}, {
+   name: '广东'
+}, {
+   name: '青海'
+}, {
+   name: '西藏'
+}, {
+   name: '四川'
+}, {
+   name: '宁夏'
+}, {
+   name: '海南'
+}, {
+   name: '台湾'
+}, {
+   name: '香港'
+}, {
+   name: '澳门'
+}, {
+   name: '南海诸岛'
+}];
+
+for (var i = 0; i < allData.length; i++) {
+   allData[i].value = Math.floor(Math.random() * 500);
+}
+option = {
+   geo: {
+      map: "china",
+      layoutCenter: ['50%', '50%'],
+      layoutSize: '115%',
+      tooltip: {
+         show: false,
+      },
+      roam: false,
+      itemStyle: {
+         normal: {
+            areaColor: '#1a365d',
+            shadowColor: "#0f5d9d",
+            shadowOffsetX: -5,
+            shadowOffsetY: 15,
+            opacity: 0.5,
+         },
+      },
+   },
+   roam: false,
+   title: {
+      text: '中国地图',
+      left: 'center',
+      top: '100px',
+      textStyle: {
+         fontSize: 50,
+         fontWeight: 'bold',
+         color: '#1a365d',
+         textBorderColor: 'gery',
+         textBorderWidth: 4
+      },
+      link: 'china.html',
+      target: '_self'
+   },
+   tooltip: {
+      show: true,
+      formatter: function (params) {
+         if (params.data) return params.name
+      },
+   },
+
+   series: [{
+      name: 'china',
+      type: 'map',
+      map: 'china',
+      data: allData,
+      layoutCenter: ['50%', '50%'],
+      layoutSize: '115%',
+      itemStyle: {
+         normal: {
+            areaColor: '#1a365d',
+            borderColor: "#32CBE0",
+            borderWidth: 1.5,
+         },
+         emphasis: {
+            borderWidth: 3,
+            borderColor: "rgba(255, 230, 175,0.8)",
+            shadowColor: "rgba(255, 230, 175,0.5)",
+            shadowBlur: 30,
+            areaColor: '#F60018'
+         }
+      },
+      label: {
+         normal: {
+            show: true,
+            formatter: function (val) {
+               var area_content = '{a|' + val.name + '}';
+               if (val.value == 0) {
+                  area_content = '{c|' + val.name + '}';
+               }
+               return area_content.split("-").join("\n");
+            },
+            rich: {
+               a: {
+                  color: '#5ccccc',
+                  fontSize: 16,
+                  fontWeight: 'bold'
+               },
+            },
+         },
+         emphasis: { show: true }
+      }
+   }]
+};
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option);
+    </script>
+
+
+
+</body>
+
+</html>

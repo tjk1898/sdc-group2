@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expanding Cards</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Muli', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* 标题展示区样式 */
+        .title-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .title-section h1 {
+            font-size: 36px;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            display: flex;
+            width: 90vw;
+        }
+
+        .panel {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 80vh;
+            border-radius: 50px;
+            color: #fff;
+            cursor: pointer;
+            flex: 0.5;
+            margin: 10px;
+            position: relative;
+            transition: all 700ms ease-in;
+        }
+
+        .panel h3 {
+            font-size: 24px;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            margin: 0;
+            opacity: 0;
+        }
+
+        .panel.active {
+            flex: 5;
+        }
+
+        .panel.active h3 {
+            opacity: 1;
+            transition: opacity 0.3s ease-in 0.4s;
+        }
+
+        .message-board {
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            width: calc(100% - 40px);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .panel.active .message-board {
+            display: block;
+        }
+
+        .message-board input {
+            width: calc(100% - 80px);
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .message-board button {
+            width: 70px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .messages {
+            margin-top: 10px;
+        }
+
+        #show-more-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0;
+        }
+
+        .card-wall {
+            width: 90vw;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+        }
+
+        .card-wall .card {
+            width: calc(25% - 20px);
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 10px;
+            border-radius: 10px;
+        }
+
+        /* 新增竖着排列的文字样式 */
+        .vertical-text {
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
+        .vertical-text1{
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                width: 100vw;
+            }
+
+            .panel:nth-of-type(4),
+            .panel:nth-of-type(5) {
+                display: none;
+            }
+
+            .card-wall .card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        /* 新增样式，用于控制部分显示，并添加艺术感边框 */
+        .section {
+            width: 90%;
+            height: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 5px solid transparent;
+            border-image: linear-gradient(45deg, #ff9a9e, #fad0c4, #fad0c4, #a18cd1) 1;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 弹幕样式 */
+        .danmu {
+            position: absolute;
+            top: 20px;
+            left: 100%;
+            white-space: nowrap;
+            font-size: 16px;
+            animation: danmuMove 10s linear infinite;
+        }
+
+        @keyframes danmuMove {
+            from {
+                left: 100%;
+            }
+            to {
+                left: -100%;
+            }
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => {
+                panel.addEventListener('click', () => {
+                    removeActiveClasses();
+                    panel.classList.add('active');
+
+                    // 如果是第五个图片，5秒后跳转
+                    if (panel === panels[4]) {
+                        setTimeout(() => {
+                            window.location.href = 'index1.html';
+                        }, 2000);
+                    }
+                });
+
+                const messageInput = panel.querySelector('.message-board input');
+                const submitButton = panel.querySelector('.message-board button');
+                const messagesDiv = panel.querySelector('.messages');
+
+                submitButton.addEventListener('click', () => {
+                    const message = messageInput.value;
+                    if (message) {
+                        const messageElement = document.createElement('p');
+                        messageElement.textContent = message;
+                        messagesDiv.appendChild(messageElement);
+                        messageInput.value = '';
+
+                        // 创建弹幕元素
+                        const danmuElement = document.createElement('div');
+                        danmuElement.classList.add('danmu');
+                        danmuElement.textContent = message;
+                        // 生成随机颜色
+                        const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                        danmuElement.style.color = randomColor;
+                        panel.appendChild(danmuElement);
+
+                        // 弹幕动画结束后移除元素
+                        danmuElement.addEventListener('animationend', () => {
+                            danmuElement.remove();
+                        });
+                    }
+                });
+            });
+
+            function removeActiveClasses() {
+                panels.forEach(panel => {
+                    panel.classList.remove('active');
+                });
+            }
+
+            const showMoreBtn = document.getElementById('show-more-btn');
+            const cardWalls = document.querySelectorAll('.card-wall');
+            showMoreBtn.addEventListener('click', () => {
+                cardWalls.forEach(cardWall => {
+                    cardWall.style.display = 'flex';
+                });
+                const lastCardWall = cardWalls[cardWalls.length - 1];
+                window.scrollTo({
+                    top: lastCardWall.offsetTop,
+                    behavior: 'smooth'
+                });
+                // 隐藏按钮
+                showMoreBtn.style.display = 'none';
+            });
+
+            // 整面滚动效果
+            const sections = document.querySelectorAll('.section');
+            let currentSectionIndex = 0;
+
+            window.addEventListener('wheel', function (e) {
+                e.preventDefault();
+                if (e.deltaY > 0 && currentSectionIndex < sections.length - 1) {
+                    currentSectionIndex++;
+                } else if (e.deltaY < 0 && currentSectionIndex > 0) {
+                    currentSectionIndex--;
+                }
+
+                const targetSection = sections[currentSectionIndex];
+                window.scrollTo({
+                    top: targetSection.offsetTop,
+                    behavior: 'smooth'
+                });
+            });
+
+            // 用指定图片填充照片墙
+            // const cards = document.querySelectorAll('.card-wall .card');
+            // const imgFolder = 'img/';
+            // const imgFiles = [
+            //     'abc2.2.png', 'abc4.jpg', 'abc3.png', 'abc2.png',
+            //     'abc1.png', 'bac 2.2.png', 'bcd1.png', 'bac 4.png',
+            //     'bac 1.png', 'bcd2.2.png', 'bcd4.jpg', 'bac 3.png',
+            //     'bcd2.png', 'bcd3.png', 'cde4.png', 'bac 2.png'
+            // ];
+
+            // cards.forEach((card, index) => {
+            //     const imgIndex = index % imgFiles.length;
+            //     const imgUrl = imgFolder + imgFiles[imgIndex];
+            //     card.style.backgroundImage = `url(${imgUrl})`;
+            // });
+
+            // 增加初始弹幕
+            const initialDanmus = [
+                "这里的风景真美！",
+                "好想去旅行啊",
+                "这些照片太赞了",
+                "这里的风景真美！",
+                "好想去旅行啊",
+                "这些照片太赞了",
+                "这里的风景真美！",
+                "好想去旅行啊",
+                "这些照片太赞了",
+                "这里的风景真美！",
+                "好想去旅行啊",
+                "这些照片太赞了",
+                "这里的风景真美！",
+                "好想去旅行啊",
+                "这些照片太赞了",
+                "这里的风景真美！",
+                "好想去旅行啊",
+               "这些照片太赞了"
+            ];
+            const danmuContainer = document.createElement('div');
+            danmuContainer.classList.add('danmu-container');
+            document.body.appendChild(danmuContainer);
+
+            initialDanmus.forEach(text => {
+                const danmu = document.createElement('div');
+                danmu.classList.add('danmu');
+                danmu.textContent = text;
+
+                // 生成随机颜色
+                const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                danmu.style.color = randomColor;
+
+                // 设置弹幕的随机垂直位置
+                const randomTop = Math.random() * (window.innerHeight - 20);
+                danmu.style.top = `${randomTop}px`;
+
+                // 设置弹幕的随机动画时长
+                const randomDuration = Math.random() * 10 + 5; // 5 - 15 秒
+                danmu.style.animationDuration = `${randomDuration}s`;
+
+                // 将弹幕添加到容器中
+                danmuContainer.appendChild(danmu);
+
+                // 动画结束后移除弹幕
+                danmu.addEventListener('animationend', () => {
+                    danmuContainer.removeChild(danmu);
+                });
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <!-- 标题展示区 -->
+    <div class="title-section">
+    </div>
+    <!-- 第一个整体部分 -->
+    <div class="section">
+        <div class="vertical-text1">给作者留言</div>
+        <div class="container">
+            <div class="panel active"
+                style="background-image: url('https://images.unsplash.com/photo-1558979158-65a1eaa08691?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80')">
+                <h3>Explore The World</h3>
+                <div class="message-board">
+                    <input type="text" placeholder="留下你的留言">
+                    <button>提交</button>
+                    <div class="messages"></div>
+                </div>
+            </div>
+            <div class="panel"
+                style="background-image: url('https://images.unsplash.com/photo-1572276596237-5db2c3e16c5d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80')">
+                <h3>Wild Forest</h3>
+                <div class="message-board">
+                    <input type="text" placeholder="留下你的留言">
+                    <button>提交</button>
+                    <div class="messages"></div>
+                </div>
+            </div>
+            <div class="panel"
+                style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1353&q=80')">
+                <h3>Sunny Beach</h3>
+                <div class="message-board">
+                    <input type="text" placeholder="留下你的留言">
+                    <button>提交</button>
+                    <div class="messages"></div>
+                </div>
+            </div>
+            <div class="panel"
+                style="background-image: url('https://images.unsplash.com/photo-1551009175-8a68da93d5f9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1351&q=80')">
+                <h3>City on Winter</h3>
+                <div class="message-board">
+                    <input type="text" placeholder="留下你的留言">
+                    <button>提交</button>
+                    <div class="messages"></div>
+                </div>
+            </div>
+            <div class="panel"
+                style="background-image: url('https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80')">
+                <h3>Mountains - Clouds</h3>
+                <div class="message-board">
+                    <input type="text" placeholder="留下你的留言">
+                    <button>提交</button>
+                    <div class="messages"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <button id="show-more-btn">Show More</button>
+    <!-- 第二个整体部分 -->
+    <div class="section">
+        <!-- 照片展示栏 -->
+        <div class="card-wall">
+            <!-- 新增竖着排列的文字 -->
+            <div class="vertical-text">照片分享墙</div>
+            <!-- 添加 16 个卡片以形成四列四行 -->
+            <div class="card" style="background-image: url('img/fj\ \(1\).jpg');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(3\).jpg');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(4\).jpg');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(5\).jpg');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(6\).jpg');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(7\).jpg');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(8\).jpg');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(1\).png');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(13\).png');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(14\).png');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(15\).png');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(16\).png');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(17\).png');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(18\).png');"></div>
+            <div class="card" style="background-image: url('img/fj\ \(19\).png');"></div>

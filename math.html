@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五一国际旅游出行</title>
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* 移除默认样式 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 背景样式 */
+    body {
+      background-image: url('images/fushishan.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* 磨砂白覆盖层 */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      z-index: 1;
+    }
+
+    /* 导航栏样式 */
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      border: none;
+    }
+
+    .nav-items {
+      text-decoration: none;
+      color: #333;
+      font-size: 18px;
+      padding: 10px 15px;
+      transition: color 0.3s ease;
+      border: none;
+    }
+
+    .nav-items:hover {
+      color: white;
+    }
+
+    .nav-items.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    /* 购票区块样式 */
+    .ticket-section {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 800px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      z-index: 2;
+    }
+
+    .ticket-header {
+      padding: 1rem 2rem;
+      background-color: #007bff;
+      color: white;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ticket-container {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ticket-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .form-group input {
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus {
+      border-color: #007bff;
+    }
+
+    .ticket-actions {
+      display: flex;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .search-button {
+      padding: 0.75rem 1.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .search-button:hover {
+      background-color: #0056b3;
+    }
+
+    .route-results {
+      margin-top: 1rem;
+      display: none;
+    }
+
+    .route-card {
+      background-color: #f8fafc;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .route-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .route-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .route-price {
+      color: #007bff;
+      font-weight: 600;
+    }
+
+    .route-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .book-button {
+      padding: 0.5rem 1rem;
+      background-color: #48bb78;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .book-button:hover {
+      background-color: #38a169;
+    }
+
+    .popular-routes {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: #f8fafc;
+      border-radius: 8px;
+    }
+
+    .popular-routes h3 {
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+    }
+
+    .route-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .route-tag {
+      padding: 0.25rem 0.75rem;
+      background-color: #e2e8f0;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .route-tag:hover {
+      background-color: #cbd5e0;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a class="nav-items" href="index1.html">Home</a>
+      <a class="nav-items" href="map.html">Map</a>
+      <a class="nav-items active">Travel</a>
+      <a class="nav-items" href="video.html">Information</a>
+      <a class="nav-items" href="search.html">Search</a>
+    </nav>
+  </header>
+
+  <!-- 购票区块 -->
+  <div class="ticket-section">
+    <div class="ticket-header">
+      <span>五一国际旅游出行</span>
+      <span class="date">2024年4月27日 - 5月5日</span>
+    </div>
+    <div class="ticket-container">
+      <div class="ticket-form">
+        <div class="form-group">
+          <label for="fromCity">出发地</label>
+          <input type="text" id="fromCity" placeholder="请输入出发城市" value="北京">
+        </div>
+        <div class="form-group">
+          <label for="toCity">目的地</label>
+          <input type="text" id="toCity" placeholder="请输入目的城市">
+        </div>
+      </div>
+      <div class="popular-routes">
+        <h3>热门目的地</h3>
+        <div class="route-tags">
+          <span class="route-tag" onclick="selectDestination('东京')">东京</span>
+          <span class="route-tag" onclick="selectDestination('首尔')">首尔</span>
+          <span class="route-tag" onclick="selectDestination('曼谷')">曼谷</span>
+          <span class="route-tag" onclick="selectDestination('巴黎')">巴黎</span>
+          <span class="route-tag" onclick="selectDestination('伦敦')">伦敦</span>
+          <span class="route-tag" onclick="selectDestination('纽约')">纽约</span>
+        </div>
+      </div>
+      <div class="ticket-actions">
+        <button class="search-button" id="searchButton">
+          <i class="fas fa-search"></i>
+          查询路线
+        </button>
+      </div>
+      <div class="route-results" id="routeResults">
+        <!-- 路线结果将在这里动态显示 -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fromCity = document.getElementById('fromCity');
+    const toCity = document.getElementById('toCity');
+    const searchButton = document.getElementById('searchButton');
+    const routeResults = document.getElementById('routeResults');
+
+    // 模拟路线数据
+    const routes = {
+      '北京-东京': [
+        {
+          type: '飞机',
+          duration: '3小时30分',
+          price: '2800元',
+          departure: '08:00',
+          arrival: '11:30',
+          platform: '携程',
+          airline: '国航'
+        },
+        {
+          type: '飞机',
+          duration: '3小时45分',
+          price: '3200元',
+          departure: '10:00',
+          arrival: '13:45',
+          platform: '飞猪',
+          airline: '全日空'
+        }
+      ],
+      '北京-首尔': [
+        {
+          type: '飞机',
+          duration: '2小时',
+          price: '2200元',
+          departure: '09:00',
+          arrival: '11:00',
+          platform: '携程',
+          airline: '大韩航空'
+        }
+      ],
+      '北京-曼谷': [
+        {
+          type: '飞机',
+          duration: '5小时',
+          price: '3500元',
+          departure: '08:30',
+          arrival: '13:30',
+          platform: '飞猪',
+          airline: '泰国航空'
+        }
+      ],
+      '北京-巴黎': [
+        {
+          type: '飞机',
+          duration: '11小时',
+          price: '6800元',
+          departure: '10:00',
+          arrival: '21:00',
+          platform: '携程',
+          airline: '法航'
+        }
+      ],
+      '北京-伦敦': [
+        {
+          type: '飞机',
+          duration: '12小时',
+          price: '7200元',
+          departure: '09:00',
+          arrival: '21:00',
+          platform: '飞猪',
+          airline: '英航'
+        }
+      ],
+      '北京-纽约': [
+        {
+          type: '飞机',
+          duration: '14小时',
+          price: '8500元',
+          departure: '08:00',
+          arrival: '22:00',
+          platform: '携程',
+          airline: '美联航'
+        }
+      ]
+    };
+
+    // 选择目的地
+    function selectDestination(city) {
+      toCity.value = city;
+      searchRoutes();
+    }
+
+    // 搜索路线
+    function searchRoutes() {
+      const from = fromCity.value.trim();
+      const to = toCity.value.trim();
+      
+      if (!from || !to) {
+        alert('请输入出发地和目的地');
+        return;
+      }
+
+      const routeKey = `${from}-${to}`;
+      const availableRoutes = routes[routeKey];
+
+      if (!availableRoutes) {
+        routeResults.innerHTML = '<div class="route-card">暂无可用路线</div>';
+        routeResults.style.display = 'block';
+        return;
+      }
+
+      // 显示路线结果
+      routeResults.innerHTML = availableRoutes.map(route => `
+        <div class="route-card">
+          <div class="route-info">
+            <span>${route.airline}</span>
+            <span>${route.departure} - ${route.arrival}</span>
+            <span class="route-price">${route.price}</span>
+          </div>
+          <div class="route-info">
+            <span>行程时间：${route.duration}</span>
+            <span>购票平台：${route.platform}</span>
+          </div>
+          <div class="route-actions">
+            <button class="book-button" onclick="bookTicket('${route.platform}')">
+              立即购票
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      routeResults.style.display = 'block';
+    }
+
+    // 购票功能
+    function bookTicket(platform) {
+      alert(`正在跳转到${platform}进行购票...`);
+      // 这里可以添加实际的购票跳转逻辑
+    }
+
+    // 事件监听
+    searchButton.addEventListener('click', searchRoutes);
+
+    // 支持回车键搜索
+    fromCity.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        toCity.focus();
+      }
+    });
+
+    toCity.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        searchRoutes();
+      }
+    });
+  </script>
+
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/cn/index.js"></script>
+  <script>
+    new CozeWebSDK.WebChatClient({
+      config: {
+        bot_id: '7496398082138210313',
+      },
+      componentProps: {
+        title: 'Coze',
+      },
+      auth: {
+        type: 'token',
+        token: 'pat_Kb2DjoBRsTO61NLBrNdH4uEovRfJAhpJaBDUL6X5WP5POb4wP8rDUCForyBsOl8a',
+        onRefreshToken: function () {
+          return 'pat_Kb2DjoBRsTO61NLBrNdH4uEovRfJAhpJaBDUL6X5WP5POb4wP8rDUCForyBsOl8a'
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

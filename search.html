@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Page</title>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* 移除默认样式 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 背景样式 */
+    body {
+      background-image: url('images/city.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      position: relative;
+    }
+
+    
+    /* 磨砂白覆盖层 */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      z-index: 1;
+    }
+
+    /* 导航栏样式 */
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      border: none;
+    }
+
+    .nav-items {
+      text-decoration: none;
+      color: #333;
+      font-size: 18px;
+      padding: 10px 15px;
+      transition: color 0.3s ease;
+      border: none;
+    }
+
+    .nav-items:hover {
+      color: white;
+    }
+
+    .nav-items.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    /* 搜索框样式 */
+    .search-container {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      width: 60%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column; /* 设置为垂直布局 */
+      align-items: center; /* 水平居中 */
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 25px;
+      outline: none;
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(5px);
+      margin-bottom: 10px; /* 与图片的间距 */
+    }
+
+    .search-box:focus {
+      border-color: #666;
+    }
+
+    /* 搜索图片样式 */
+    .search-image {
+      top: 17%;
+      right: 1%;
+      width: 30px; /* 设置图片宽度 */
+      height: 30px; /* 设置图片高度 */
+      cursor: pointer; /* 鼠标指针样式 */
+      position: absolute;
+    }
+
+    /* 悬浮按钮样式 */
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 25px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      font-size: 24px;
+    }
+
+    /* 悬浮窗口样式 */
+    #chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 500px; /* 增大宽度 */
+      height: 600px; /* 增大高度 */
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+    }
+
+    /* 关闭按钮样式 */
+    #close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a class="nav-items" href="index1.html">Home</a>
+      <a class="nav-items" href="map.html">Map</a>
+      <a class="nav-items" href="math.html">Travel</a>
+      <a class="nav-items" href="video.html">Information</a>
+      <a class="nav-items active">Search</a>
+    </nav>
+  </header>
+
+  <!-- 页面内容 -->
+  <div class="content">
+    <div class="search-container">
+      <input type="text" class="search-box" placeholder="Search...">
+      <img src="images/sousuo.png" alt="搜索图标" class="search-image" onclick="window.location.href='newpage.html'">
+    </div>
+  </div>
+
+ 
+
+  <script>
+    const chatButton = document.getElementById('chat-button');
+    const chatPopup = document.getElementById('chat-popup');
+    const closeButton = document.getElementById('close-button');
+
+    // 点击按钮显示悬浮窗口
+    chatButton.addEventListener('click', function () {
+      chatPopup.style.display = 'block';
+    });
+
+    // 点击关闭按钮隐藏悬浮窗口
+    closeButton.addEventListener('click', function () {
+      chatPopup.style.display = 'none';
+    });
+  </script>
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/cn/index.js"></script>
+  <script>
+    new CozeWebSDK.WebChatClient({
+      config: {
+        bot_id: '7496398082138210313',
+      },
+      componentProps: {
+        title: 'Coze',
+      },
+      auth: {
+        type: 'token',
+        token: 'pat_Kb2DjoBRsTO61NLBrNdH4uEovRfJAhpJaBDUL6X5WP5POb4wP8rDUCForyBsOl8a',
+        onRefreshToken: function () {
+          return 'pat_Kb2DjoBRsTO61NLBrNdH4uEovRfJAhpJaBDUL6X5WP5POb4wP8rDUCForyBsOl8a'
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

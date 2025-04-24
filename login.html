@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <style>
+        /* 补充右侧宣传区域样式（如果未包含在style.css中） */
+        .form_right {
+            position: absolute;
+            left: 10%;
+            width: 40%;
+            min-width: 400px;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            color: white;
+        }
+
+       .right_content {
+            width: 100%;
+        }
+
+       .right_content h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+
+       .right_content p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 1024px) {
+           .form_right {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="form_box">
+        <img class="yunduo" src="./images/yunduo.png" alt="">
+        <div class="form_right">
+            <div class="right_content">
+
+                <img src="./imag/bac 4.png" > <!-- 需准备此图片 -->
+
+            </div>
+        </div>
+        <!-- 登录/注册表单区域 -->
+        <div class="form_list">
+            <ul>
+                <div class="form_title">
+                    <span class="title_style" id="loginTitle">
+                        登录
+                        <div></div>
+                    </span>
+                    <span id="registerTitle">
+                        注册
+                        <div></div>
+                    </span>
+                    <div class="clear"></div>
+                </div>
+                <!-- 登录表单（box1） -->
+                <div class="box1">
+                    <li class="list_in">
+                        <input type="text" placeholder="请输入账号">
+                    </li>
+                    <li class="list_in">
+                        <input type="password" placeholder="请输入密码"> <!-- 修正密码输入类型为password -->
+                    </li>
+                    <li class="xieyi">
+                        <input type="checkbox" id="agreeCheckbox" name="agreeCheckbox" value="agree">
+                        已阅读并同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a>
+                    </li>
+                    <li class="caozuo">
+                        <button id="loginBtn">登录</button>
+                    </li>
+                </div>
+                <!-- 注册表单（box2） -->
+                <div class="box2" style="display: none;">
+                    <li class="list_in">
+                        <input type="text" placeholder="昵称">
+                    </li>
+                    <li class="list_in">
+                        <input type="text" placeholder="请输入账号">
+                    </li>
+                    <li class="list_in">
+                        <input type="password" placeholder="请输入密码"> <!-- 修正密码输入类型 -->
+                    </li>
+                    <li class="xieyi">
+                        <input type="checkbox" id="registerCheckbox" name="registerCheckbox" value="agree">
+                        已阅读并同意 <a href="#">用户协议</a> 和 <a href="#">隐私政策</a>
+                    </li>
+                    <li class="caozuo">
+                        <button id="registerBtn">注册</button> <!-- 修正按钮文本为“注册” -->
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 获取元素
+        const loginSpan = document.getElementById("loginTitle");
+        const registerSpan = document.getElementById("registerTitle");
+        const box1 = document.querySelector(".box1");
+        const box2 = document.querySelector(".box2");
+        const loginBtn = document.getElementById("loginBtn");
+        const registerBtn = document.getElementById("registerBtn");
+
+        // 切换登录/注册表单
+        function switchForm(showBox) {
+            box1.style.display = showBox === "login" ? "block" : "none";
+            box2.style.display = showBox === "register" ? "block" : "none";
+            loginSpan.classList.toggle("title_style", showBox === "login");
+            registerSpan.classList.toggle("title_style", showBox === "register");
+        }
+
+        loginSpan.addEventListener("click", () => switchForm("login"));
+        registerSpan.addEventListener("click", () => switchForm("register"));
+
+        // 登录按钮点击事件处理函数
+        loginBtn.addEventListener("click", () => {
+            console.log("登录按钮点击");
+            // 跳转到 index1.html 页面
+            window.location.href = "index1.html";
+        });
+
+        // 注册按钮点击事件处理函数
+        registerBtn.addEventListener("click", () => {
+            console.log("注册按钮点击");
+            // 弹出提示框显示注册成功
+            alert("注册成功");
+            // 跳转到登录界面
+            switchForm("login");
+            // 此处可添加实际注册逻辑
+        });
+    </script>
+</body>
+
+</html>

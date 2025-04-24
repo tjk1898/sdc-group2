@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Page</title>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- stylesheet -->
+  <style>
+    /* 移除默认样式 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 背景样式 */
+    body {
+      background-image: url('img/bac 4.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* 磨砂白覆盖层 */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      z-index: 1;
+    }
+
+    /* 区块容器样式 */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 20px; /* 减小区块间距 */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 1200px;
+      z-index: 2;
+    }
+
+    /* 大区块样式 */
+    .large-grid-item {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+      background-color: rgba(255, 255, 255, 0.7);
+      display: flex;
+      flex-direction: column;
+      font-size: 24px;
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      border-radius: 0;
+    }
+
+    /* 大区块上半部分样式 */
+    .large-grid-item-top {
+      flex: 3; /* 减小上半部分比例 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px; /* 减小内边距 */
+    }
+
+    /* 大区块下半部分样式 */
+    .large-grid-item-bottom {
+      flex: 1;
+      display: flex;
+      flex-direction: column;   
+      align-items: center;
+      padding: 8px; /* 减小内边距 */
+    }
+
+    /* 调整文字样式以减少空间占用 */
+    .large-grid-item-bottom p {
+      font-size: 16px; /* 减小字体大小 */
+      line-height: 1.4; /* 减小行高 */
+      margin: 2px 12px; /* 减小边距 */
+      text-indent: 2em;
+    }
+
+    /* 单个区块样式 */
+    .grid-item {
+      background-color: rgba(255, 255, 255, 0.7);
+      display: flex;  
+      color: #333;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      padding: 0px 0px;
+      border-radius: 0;
+    }
+    .icon{
+      width: 20px;
+      height: 20px;
+    }    
+   .grid-item-top {
+      width: 300px;
+      height: 260px; 
+    }
+    .grid-item-bottom1 {
+      position: absolute;
+      top: 150px; /* 调整位置 */
+    }
+    .grid-item-bottom2 {
+      position: absolute;
+      top: 430px; /* 调整位置 */
+    }
+    .grid-item-bottom3 {
+      position: absolute;
+      top: 710px; /* 调整位置 */
+    }
+    .reader-text{
+      padding-left: 200px;
+      position: absolute;
+      top: 85px; /* 调整位置 */
+      }
+      .title-text p{
+        width: 280px;
+      }
+
+  
+   
+
+    /* 调整文字样式以减少空间占用 */
+    .text p {
+      font-size: 13px; /* 减小字体大小 */
+      line-height: 1.4; /* 减小行高 */
+      margin: 2px 14px; /* 减小边距 */
+    }
+
+    .grid-item:hover,
+    .large-grid-item:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    /* 返回链接样式 */
+    .back-link {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 18px;
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      z-index: 3;
+      background-color: transparent; /* 背景变为透明 */
+      padding: 10px 20px;
+    }
+
+    .back-link:hover {
+      color: #ccc;
+    }
+
+    /* 轮播图容器样式 */
+    .carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* 轮播图项样式 */
+    .carousel-item {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* 确保图片充满容器并保持比例 */
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    /* 默认显示第一张图片 */
+    .carousel-item:first-child {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 区块容器 -->
+  <div class="grid-container">
+    <!-- 大区块（合并 1, 2, 5, 6）-->
+    <div class="large-grid-item">
+      <div class="large-grid-item-top">
+        <div class="carousel">
+          <img src="worldimg/1.png" alt="Golden Gate Bridge" class="carousel-item">
+          <img src="worldimg/2.png" alt="Sydney Opera House" class="carousel-item">
+          <img src="worldimg/3.png" alt="Beijing Cityscape" class="carousel-item">
+          <img src="worldimg/4.png" alt="Cologne Cathedral" class="carousel-item">
+        </div>
+      </div>
+      <div class="large-grid-item-bottom">
+        <p>There are some mega-metropolises on this planet with incredible skylines. </p>
+        <p>Visit them all via these live webcam feeds of cityscapes streaming from the seven continents. </p>
+      </div>
+    </div>
+
+    <!-- 第一行 -->
+    <div class="grid-item">
+      <div class="grid-item-top"><img width="300" height="150" src="https://www.camscape.com/content/uploads/2023/10/gazaskyline.jpg"  ></div>
+      <div class="grid-item-bottom1">
+        <div class="text">
+          <div class="title-text">
+            <p> <a href="https://www.camscape.com/webcam/gaza-war-palestine-live-webcams/">Gaza, Israel and Middle East Live Webcams</a></p>
+          </div>
+          <div><p  data-timezone="Asia/Gaza">
+              <img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/clock.png">Local Time&nbsp;<span class="hours">13</span>:<span class="minutes">19</span>
+            </p>
+            <p ><img class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/temp.png">Temp&nbsp;37°C / 99°F</p>
+            <p ><img class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/map.png"><span><a href="https://www.camscape.com/location/israel/">Israel</a> | <a href="https://www.camscape.com/location/state-of-palestine/">State of Palestine</a></span></p>
+            <span class="reader-text"><span >Views:</span>549.1k</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 第一行第二个 -->
+    <div class="grid-item">
+      <div class="grid-item-top"><img width="300" height="150" src="https://www.camscape.com/content/uploads/2020/12/hongkongharbour.jpg" ></div>
+     <div class="grid-item-bottom1" >
+      <div class="text">
+				<div class="title-text">
+					<p><a href="https://www.camscape.com/webcam/hong-kong-harbour-webcam/">Hong Kong Harbour Webcam</a></p>
+        </div>
+			 <div><p  data-timezone="Asia/Hong_Kong">
+						<img class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/clock.png">Local Time&nbsp;<span class="hours">14</span>:<span class="minutes">25</span>
+					 </p>
+          <p ><img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/temp.png">Temp&nbsp;30°C / 86°F</p>
+          <p ><img class="icon"  src="https://www.camscape.com/content/themes/camscape/assets/img/map.png"><span><a href="https://www.camscape.com/location/hong-kong/">Hong Kong</a></span></p>
+					<span class="reader-text"><span >Views:</span>38.9k</span>
+			 </div>
+      </div>
+     </div>
+		</div>
+
+    <!-- 第二行 -->
+    <div class="grid-item">
+      <div class="grid-item-top"><img width="300" height="150" src="https://www.camscape.com/content/uploads/2020/11/tokyorailwayfreeway.jpg" ></div>
+        <div class="grid-item-bottom2">
+          <div class="text">
+            <div class="title-text">
+                <p> <a href="https://www.camscape.com/webcam/tokyo-railway-and-freeway-cams/">Tokyo Railway and Freeway Cams</a></p>
+            </div>
+            <div><p  data-timezone="Asia/Tokyo">
+              <img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/clock.png">Local Time&nbsp;<span class="hours">19</span>:<span class="minutes">39</span>
+                </p>
+                <p ><img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/temp.png">Temp&nbsp;18°C / 64°F</p>
+                  <p ><img class="icon"  src="https://www.camscape.com/content/themes/camscape/assets/img/map.png"><span><a href="https://www.camscape.com/location/japan/">Japan</a></span></p>
+                <span class="reader-text"><span >Views:</span>22.3k</span>
+            </div>
+         </div>
+      </div>
+    </div>
+    <!-- 第二行第二个 -->
+    <div class="grid-item">
+      <div class="grid-item-top"><img width="300" height="150" src="https://www.camscape.com/content/uploads/2021/01/rotterdamerasmuswebcams.jpg" ></div>
+      <div class="grid-item-bottom2">
+        <div class="text">
+          <div class="title-text">
+             <p><a href="https://www.camscape.com/webcam/rotterdam-webcam-views/">Rotterdam Webcam Views</a></p>
+          </div>
+            <div><p  data-timezone="Europe/Amsterdam">
+                  <img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/clock.png">Local Time&nbsp;<span class="hours">13</span>:<span class="minutes">12</span>
+                </p><p ><img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/temp.png">Temp&nbsp;14°C / 57°F</p>
+                <p ><img class="icon"  src="https://www.camscape.com/content/themes/camscape/assets/img/map.png"><span><a href="https://www.camscape.com/location/netherlands/">Netherlands</a></span></p>
+                <span class="reader-text"><span >Views:</span>28.1k</span>
+            </div>
+          </div>
+      </div>
+    </div>
+    
+    <!-- 第三行 -->
+    <div class="grid-item">
+      <div class="grid-item-top"><img width="300" height="150" src="https://www.camscape.com/content/uploads/2020/12/stpetersburgwebcams.jpg" ></div>
+      <div class="grid-item-bottom3">
+        <div class="text">
+          <div class="title-text">
+                  <p> <a href="https://www.camscape.com/webcam/saint-petersburg-webcams/">Saint Petersburg Webcams</a> </p>
+           </div>
+              <div><p  data-timezone="Europe/Moscow">
+                    <img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/clock.png">Local Time&nbsp;<span class="hours">14</span>:<span class="minutes">23</span>
+                  </p><p ><img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/temp.png">Temp&nbsp;9°C / 48°F</p>
+                  <p ><img class="icon"  src="https://www.camscape.com/content/themes/camscape/assets/img/map.png"><span><a href="https://www.camscape.com/location/russia/">Russia</a></span></p>
+                  <span class="reader-text"><span >Views:</span>8.7k</span>
+              </div>
+           </div>
+      </div>
+    </div>
+   <!--第三行第二个--> 
+    <div class="grid-item">
+      <div class="grid-item-top"><img width="300" height="150" src="https://www.camscape.com/content/uploads/2020/11/iisalmicity.jpg" ></div>
+      <div class="grid-item-bottom3">
+        <div class="text">
+          <div class="title-text">
+                  <p>
+                    <a href="https://www.camscape.com/webcam/lisalmi-town-webcam/">lisalmi Town Webcam</a>
+                  </p></div>
+              <div><p  data-timezone="Europe/Helsinki">
+                    <img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/clock.png">Local Time&nbsp;<span class="hours">14</span>:<span class="minutes">27</span>
+                  </p><p ><img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/temp.png">Temp&nbsp;5°C / 41°F</p>
+                  <p ><img class="icon"  src="https://www.camscape.com/content/themes/camscape/assets/img/map.png"><span><a href="https://www.camscape.com/location/finland/">Finland</a></span></p>
+                  <span class="reader-text"><span >Views:</span>2.5k</span>
+              </div>
+            </div>
+         </div>
+    </div>
+    <!--Third行第三个--> 
+    <div class="grid-item">
+      <div class="grid-item-top"><img width="300" height="150" src="https://www.camscape.com/content/uploads/2020/12/singaporedowntown.jpg" ></div>
+        <div class="grid-item-bottom3">
+          <div class="text">
+           <div class="title-text">
+                  <p><a href="https://www.camscape.com/webcam/downtown-singapore-webcam/">Downtown Singapore Webcam</a></p></div>
+              <div><p  data-timezone="Asia/Singapore">
+                    <img class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/clock.png">Local Time&nbsp;<span class="hours">19</span>:<span class="minutes">38</span>
+                  </p><p ><img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/temp.png">Temp&nbsp;29°C / 84°F</p>
+                  <p ><img class="icon"  src="https://www.camscape.com/content/themes/camscape/assets/img/map.png"><span><a href="https://www.camscape.com/location/singapore/">Singapore</a></span></p>
+                  <span class="reader-text"><span >Views:</span>6.2k</span>
+              </div>
+           </div>
+        </div>
+    </div>
+    <!--Third行第四个-->
+    <div class="grid-item">
+      <div class="grid-item-top"><img width="300" height="150" src="https://www.camscape.com/content/uploads/2023/07/portosantobeachmadeira.jpg" ></div>
+      <div class="grid-item-bottom3">
+        <div class="text">
+          <div class="title-text">
+                  <p><a href="https://www.camscape.com/webcam/porto-santo-beach-webcam-madeira/">Porto Santo Beach Webcam, Madeira</a></p>
+              </div>
+              <div><p  data-timezone="Atlantic/Madeira">
+                    <img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/clock.png">Local Time&nbsp;<span class="hours">12</span>:<span class="minutes">41</span>
+                  </p><p ><img  class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/temp.png">Temp&nbsp;18°C / 64°F</p>
+                  <p ><img class="icon" src="https://www.camscape.com/content/themes/camscape/assets/img/map.png"><span><a href="https://www.camscape.com/location/portugal/">Portugal</a></span></p>
+                  <span class="reader-text"><span >Views:</span>14.7k</span>
+              </div>
+            </div>
+        </div>
+  </div>
+  <!-- 返回链接 -->
+  <a href="search.html" class="back-link">Return to the search page...</a>
+</body>
+<script>
+  // 获取所有轮播图项
+  const carouselItems = document.querySelectorAll('.carousel-item');
+
+  // 当前显示的图片索引
+  let currentIndex = 0;
+
+  // 切换图片函数
+  function switchImage() {
+    // 隐藏当前图片
+    carouselItems[currentIndex].style.opacity = 0;
+
+    // 更新当前图片索引
+    currentIndex = (currentIndex + 1) % carouselItems.length;
+
+    // 显示下一图片
+    carouselItems[currentIndex].style.opacity = 1;
+  }
+
+  // 每3秒切换一次图片
+  setInterval(switchImage, 2000);
+</script>
+
+</html>

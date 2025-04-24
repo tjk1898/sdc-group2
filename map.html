@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Page</title>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <script src="js/echarts.js"></script>
+  <script src="js/world.js"></script>
+  <style>
+    /* 移除默认样式 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex; /* 使用 flexbox 布局 */
+      justify-content: center; /* 水平居中 */
+      align-items: center; /* 垂直居中 */
+      height: 100%; /* 设置 body 高度为视口高度 */
+    }
+
+    /* 背景样式 */
+    body {
+      background-image: url('images/kelong.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      z-index: 1;
+    }
+
+    /* 导航栏样式 */
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      border: none;
+    }
+
+    .nav-items {
+      text-decoration: none;
+      color: #333;
+      font-size: 18px;
+      padding: 10px 15px;
+      transition: color 0.3s ease;
+      border: none;
+    }
+
+    .nav-items:hover {
+      color: white;
+    }
+
+    .nav-items.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    /* 悬浮按钮样式 */
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 25px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      font-size: 24px;
+    }
+
+    /* 悬浮窗口样式 */
+    #chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 500px;
+      height: 600px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+    }
+
+    /* 关闭按钮样式 */
+    #close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    #main {
+      z-index: 3; /* 确保图表位于最上层 */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 添加导航栏 -->
+  <header>
+    <nav>
+      <a class="nav-items" href="index1.html">Home</a>
+      <a class="nav-items active" href="map.html">Map</a>
+      <a class="nav-items" href="math.html">Travel</a> 
+      <a class="nav-items" href="video.html">Information</a>
+      <a class="nav-items" href="search.html">Search</a>
+    </nav>
+  </header>
+
+  <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+  <div id="main" style="width: 2000px;height:850px;"></div>
+  <script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    var option = {
+      backgroundColor: 'transparent',
+      title: {
+        text: '出访境外',
+        // x: 'left',
+        y: 'top',
+        top: '4%',
+        left: 'center',
+        textStyle: {
+          color: '#fff',
+          fontSize: 60
+        },//标题样式
+      },
+      tooltip: {
+        padding: 0,
+        enterable: true,
+        transitionDuration: 1,
+        textStyle: {
+          color: '#000',
+          decoration: 'none',
+        },//tooltip样式
+      },
+      nameMap: {
+        "St. Pierre and Miquelon": "圣皮埃尔岛和密克隆岛",
+        "S. Geo. and S. Sandw. Is.": "南乔治亚和南桑德威奇群岛",
+        Niue: "纽埃",
+        Tonga: "汤加",
+        Kiribati: "基里巴斯",
+        "Côte d'Ivoire": "科特迪瓦",
+        Afghanistan: "阿富汗",
+        Singapore: "新加坡",
+        Angola: "安哥拉",
+        Albania: "阿尔巴尼亚",
+        "United Arab Emirates": "阿联酋",
+        Argentina: "阿根廷",
+        Armenia: "亚美尼亚",
+        "French Southern and Antarctic Lands": "法属南半球和南极领地",
+        Australia: "澳大利亚",
+        Austria: "奥地利",
+        Azerbaijan: "阿塞拜疆",
+        Burundi: "布隆迪",
+        Belgium: "比利时",
+        Benin: "贝宁",
+        "Burkina Faso": "布基纳法索",
+        Bangladesh: "孟加拉国",
+        Bulgaria: "保加利亚",
+        "The Bahamas": "巴哈马",
+        "Bosnia and Herzegovina": "波斯尼亚和黑塞哥维那",
+        Belarus: "白俄罗斯",
+        Belize: "伯利兹",
+        Bermuda: "百慕大",
+        Bolivia: "玻利维亚",
+        Brazil: "巴西",
+        Brunei: "文莱",
+        Bhutan: "不丹",
+        Botswana: "博茨瓦纳",
+        "Central African Republic": "中非共和国",
+        Canada: "加拿大",
+        Switzerland: "瑞士",
+        Chile: "智利",
+        China: "中国",
+        "Ivory Coast": "象牙海岸",
+        Cameroon: "喀麦隆",
+        "Dem. Rep. Congo": "刚果民主共和国",
+        "Republic of the Congo": "刚果共和国",
+        Colombia: "哥伦比亚",
+        "Costa Rica": "哥斯达黎加",
+        Cuba: "古巴",
+        "Northern Cyprus": "北塞浦路斯",
+        Cyprus: "塞浦路斯",
+        "Czech Republic": "捷克共和国",
+        Germany: "德国",
+        Djibouti: "吉布提",
+        Denmark: "丹麦",
+        "Dominican Republic": "多明尼加共和国",
+        Algeria: "阿尔及利亚",
+        Ecuador: "厄瓜多尔",
+        Egypt: "埃及",
+        Eritrea: "厄立特里亚",
+        Spain: "西班牙",
+        Estonia: "爱沙尼亚",
+        Ethiopia: "埃塞俄比亚",
+        Finland: "芬兰",
+        Fiji: "斐",
+        "Falkland Islands": "福克兰群岛",
+        France: "法国",
+        Gabon: "加蓬",
+        "United Kingdom": "英国",
+        // 其他国家映射...
+      },
+      geo: {
+        type: "map",
+        map: 'world',
+        zoom: 1.2, //当前视角的缩放比例
+        roam: true, //是否开启平游或缩放
+        aspectScale: 0.86,
+        layoutCenter: ["50%", "50%"], //地图位置
+        layoutSize: '100%',
+        label: {
+          emphasis: {
+            show: true,
+            color: "#fff"
+          }//标签样式
+        },
+        itemStyle: {
+          normal: {
+            areaColor: 'rgb(10,60,83)',
+            borderColor: 'rgb(190,190,190)',
+            borderWidth: 1,
+            areaColor: {
+              type: 'radial',
+              x: 0.5,
+              y: 0.5,
+              r: 0.8,
+              colorStops: [{
+                offset: 0,
+                color: 'rgb(255,250,205,0.5)' // 0% 处的颜色
+              }, {
+                offset: 1,
+                color: 'rgb(127,255,212,0.4)' // 100% 处的颜色
+              }],
+              globalCoord: false // 缺省为 false
+            },
+            shadowColor: 'rgba(128, 217, 248, 1)',
+          },//陆地颜色
+          emphasis: {
+            areaColor: '#389bb7',//高亮颜色
+            /* label: {
+                color: "#fff"
+            } */
+          }
+        },
+      },
+      series: []
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+    // 监听地图点击事件
+    myChart.on('click', function (params) {
+      if (params.name === '中国') {
+        window.location.href = 'beijing.html'; // 跳转到新页面
+      }
+    });
+  </script>
+
+ 
+
+  
+
+  <script>
+    const chatButton = document.getElementById('chat-button');
+    const chatPopup = document.getElementById('chat-popup');
+    const closeButton = document.getElementById('close-button');
+
+    // 点击按钮显示悬浮窗口
+    chatButton.addEventListener('click', function () {
+      chatPopup.style.display = 'block';
+    });
+
+    // 点击关闭按钮隐藏悬浮窗口
+    closeButton.addEventListener('click', function () {
+      chatPopup.style.display = 'none';
+    });
+  </script>
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/cn/index.js"></script>
+  <script>
+    new CozeWebSDK.WebChatClient({
+      config: {
+        bot_id: '7496398082138210313',
+      },
+      componentProps: {
+        title: 'Coze',
+      },
+      auth: {
+        type: 'token',
+        token: 'pat_Kb2DjoBRsTO61NLBrNdH4uEovRfJAhpJaBDUL6X5WP5POb4wP8rDUCForyBsOl8a',
+        onRefreshToken: function () {
+          return 'pat_Kb2DjoBRsTO61NLBrNdH4uEovRfJAhpJaBDUL6X5WP5POb4wP8rDUCForyBsOl8a'
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

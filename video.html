@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Page</title>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+  <script src="https://www.isqqw.com/asset/libs/echarts-liquidfill/3.1.0/echarts-liquidfill.min.js"></script>
+  <style>
+    /* 移除默认样式 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 背景样式 */
+    body {
+      background-image: url('images/huoshan.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* 磨砂白覆盖层 */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      z-index: 1;
+    }
+
+    /* 导航栏样式 */
+    header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      border: none;
+    }
+
+    .nav-items {
+      text-decoration: none;
+      color: #333;
+      font-size: 18px;
+      padding: 10px 15px;
+      transition: color 0.3s ease;
+      border: none;
+    }
+
+    .nav-items:hover {
+      color: white;
+    }
+
+    .nav-items.active {
+      color: white;
+      font-weight: bold;
+    }
+
+    /* 悬浮按钮样式 */
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 25px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      font-size: 24px;
+    }
+
+    /* 悬浮窗口样式 */
+    #chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 500px;
+      height: 600px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+    }
+
+    /* 关闭按钮样式 */
+    #close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    #main1 {
+      top:6%;
+      
+      z-index: 3; /* 确保图表位于最上层 */
+      position: relative; /* 确保子元素的绝对定位相对于此元素 */
+    }
+
+    #main2 {
+      z-index: 4; /* 确保图表位于最上层 */
+      position: absolute; /* 使用绝对定位 */
+      top: 50px; /* 调整 top 值以控制位置 */
+      left: 0%; /* 调整 left 值以控制位置 */
+    }
+    #main3 {
+      z-index: 4; /* 确保图表位于最上层 */
+      position: absolute; /* 使用绝对定位 */
+      bottom: 50px; /* 调整 top 值以控制位置 */
+      right: -5%; /* 调整 left 值以控制位置 */
+    }
+    #main4 {
+      z-index: 4; /* 确保图表位于最上层 */
+      position: absolute; /* 使用绝对定位 */
+      bottom: 10px; /* 调整 top 值以控制位置 */
+      left: 0%; /* 调整 left 值以控制位置 */
+    }
+    #main5 {
+      z-index: 4; /* 确保图表位于最上层 */
+      position: absolute; /* 使用绝对定位 */
+      top: 50px; /* 调整 top 值以控制位置 */
+      right: 0%; /* 调整 left 值以控制位置 */
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+  <div id="main1" style="width: 1850px; height: 900px;"></div>
+  <script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main1'));
+
+    // 指定图表的配置项和数据
+    var data = [
+      {
+        name: '长城',
+        value: 1200
+      },
+      {
+        name: '埃菲尔铁塔',
+        value: 1100
+      },
+      {
+        name: '大峡谷国家公园',
+        value: 1000
+      },
+      {
+        name: '古罗马斗兽场',
+        value: 900
+      },
+      {
+        name: '金字塔',
+        value: 850
+      },
+      {
+        name: '泰姬陵',
+        value: 800
+      },
+      {
+        name: '大本钟',
+        value: 750
+      },
+      {
+        name: '悉尼歌剧院',
+        value: 700
+      },
+      {
+        name: '富士山',
+        value: 650
+      },
+      {
+        name: '北京故宫',
+        value: 600
+      },
+      {
+        name: '自由女神像',
+        value: 550
+      },
+      {
+        name: '雅典卫城',
+        value: 500
+      },
+      {
+        name: '张家界武陵源',
+        value: 480
+      },
+      {
+        name: '红场',
+        value: 450
+      },
+      {
+        name: '杭州西湖',
+        value: 420
+      },
+      {
+        name: '里约热内卢基督像',
+        value: 400
+      },
+      {
+        name: '苏州园林',
+        value: 380
+      },
+      {
+        name: '吴哥窟',
+        value: 350
+      },
+      {
+        name: '秦始皇兵马俑',
+        value: 320
+      },
+      {
+        name: '圣索菲亚大教堂',
+        value: 300
+      },
+      {
+        name: '布达拉宫',
+        value: 280
+      },
+      {
+        name: '落基山国家公园群',
+        value: 250
+      },
+      {
+        name: '丽江古城',
+        value: 220
+      },
+      {
+        name: '奇琴伊察玛雅城邦遗址',
+        value: 200
+      },
+      {
+        name: '黄山',
+        value: 180
+      },
+      {
+        name: '皇后镇',
+        value: 160
+      },
+      {
+        name: '青海湖',
+        value: 140
+      },
+      {
+        name: '新天鹅堡',
+        value: 120
+      },
+      {
+        name: '亚龙湾',
+        value: 100
+      },
+      {
+        name: '大皇宫',
+        value: 80
+      },
+      {
+        name: '香港迪士尼乐园',
+        value: 60
+      },
+      {
+        name: '风车村',
+        value: 40
+      },
+      {
+        name: '大三巴牌坊',
+        value: 30
+      },
+      {
+        name: '日月潭',
+        value: 20
+      },
+      {
+        name: '鼓浪屿',
+        value: 15
+      },
+      {
+        name: '挪威峡湾',
+        value: 12
+      },
+      {
+        name: '乌镇',
+        value: 10
+      },
+      {
+        name: '瑞典冰雕节场地',
+        value: 8
+      },
+      {
+        name: '东方明珠',
+        value: 6
+      },
+      {
+        name: '下龙湾',
+        value: 4
+      },
+      {
+        name: '喀纳斯湖',
+        value: 3
+      },
+      {
+        name: '好望角',
+        value: 2
+      },
+      {
+        name: '桂林漓江',
+        value: 1
+      },
+      {
+        name: '阿尔卑斯山',
+        value: 1250
+      },
+      {
+        name: '九寨沟',
+        value: 580
+      },
+      {
+        name: '威尼斯水城',
+        value: 550
+      },
+      {
+        name: '凤凰古城',
+        value: 500
+      },
+      {
+        name: '马赛马拉国家保护区',
+        value: 450
+      },
+      {
+        name: '庐山',
+        value: 420
+      },
+      {
+        name: '黄石国家公园',
+        value: 400
+      },
+      {
+        name: '莫高窟',
+        value: 380
+      },
+      {
+        name: '卢浮宫',
+        value: 350
+      },
+      {
+        name: '泰山',
+        value: 320
+      },
+      {
+        name: '大堡礁',
+        value: 300
+      },
+      {
+        name: '武当山',
+        value: 280
+      },
+      {
+        name: '伊瓜苏大瀑布',
+        value: 250
+      },
+      {
+        name: '平遥古城',
+        value: 220
+      },
+      {
+        name: '伦敦塔桥',
+        value: 200
+      },
+      {
+        name: '大足石刻',
+        value: 180
+      },
+      {
+        name: '夏威夷群岛',
+        value: 160
+      },
+      {
+        name: '云南石林风景区',
+        value: 140
+      },
+      {
+        name: '圣家族大教堂',
+        value: 120
+      },
+      {
+        name: '武夷山',
+        value: 100
+      },
+      {
+        name: '乌鲁鲁巨石',
+        value: 80
+      },
+      {
+        name: '南京中山陵',
+        value: 60
+      },
+      {
+        name: '复活节岛石像',
+        value: 40
+      },
+      {
+        name: '峨眉山',
+        value: 30
+      },
+      {
+        name: '阿里山',
+        value: 20
+      },
+      {
+        name: '九华山',
+        value: 15
+      },
+      {
+        name: '华山',
+        value: 12
+      },
+      {
+        name: '长白山天池',
+        value: 10
+      },
+      {
+        name: '承德避暑山庄',
+        value: 8
+      },
+      {
+        name: '颐和园',
+        value: 6
+      },
+      {
+        name: '北海银滩',
+        value: 4
+      },
+      {
+        name: '香格里拉',
+        value: 3
+      },
+      {
+        name: '雁荡山',
+        value: 2
+      },
+      {
+        name: '三清山',
+        value: 1
+      }
+    ];
+
+    option = {
+      backgroundColor: 'transparent',
+      tooltip: {
+        show: false
+      },
+      series: [
+        {
+          type: 'wordCloud',
+          gridSize: 5,
+          sizeRange: [10, 50], // 增加字体大小范围
+          rotationRange: [-90, 90], // 增加旋转角度范围
+          rotationStep: 45,
+          shape: 'circle', // 使用圆形布局
+          width: '100%',
+          height: '100%',
+          layoutCenter: ['50%', '50%'], // 居中显示
+          layoutSize: '80%', // 设置词云图的大小
+          textStyle: {
+            normal: {
+              color: function () {
+                return (
+                  'rgb(' +
+                  [
+                    Math.round(Math.random() * 160),
+                    Math.round(Math.random() * 160),
+                    Math.round(Math.random() * 160),
+                  ].join(',') +
+                  ')'
+                );
+              },
+            },
+          },
+          data: data,
+        },
+      ],
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+  </script>
+
+  <div id="main2" style="width: 600px;height:400px;"></div>
+  <script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main2'));
+
+    // 指定图表的配置项和数据
+   option = {
+  title: {
+    text: '全球热门旅游国家综合体验对比',
+    left: 'center',
+    textStyle: {
+      fontWeight: 'bold',
+      color: '#fff',
+      textBorderColor: 'gray',
+      textBorderWidth: 1
+    }
+  },
+  backgroundColor: "transparent",
+  color: ["#3779D2", "#6699D9", "#99BBE6"],
+  tooltip: {
+    trigger: "item",
+  },
+  legend: {
+    top: "5%",
+    left: "center",
+    textStyle: {
+      color: "#7a869a",
+    },
+  },
+  radar: {
+    indicator: [
+      { name: "文化遗产吸引力", max: 100 },
+      { name: "自然风光质量", max: 100 },
+      { name: "旅游设施完善度", max: 100 },
+      { name: "交通便利程度", max: 100 },
+      { name: "旅游安全指数", max: 100 }
+    ],
+    shape: "circle",
+    radius: "60%",
+    name: {
+      textStyle: {
+        color: "#7a869a",
+        fontSize: 14
+      },
+    },
+    splitLine: {
+      lineStyle: {
+        color: "#e4f1fc"
+      }
+    },
+    axisLine: {
+      lineStyle: {
+        color: "#7a869a"
+      }
+    },
+    splitArea: {
+      areaStyle: {
+        color: ["#f5f9ff", "#e4f1fc"]
+      }
+    }
+  },
+  series: [
+    {
+      name: "国家评分",
+      type: "radar",
+      data: [
+        {
+          value: [98, 60, 85, 75, 80], // 意大利，文化遗产极强，自然风光较弱
+          name: "意大利",
+          areaStyle: {
+            opacity: 0.3
+          }
+        },
+        {
+          value: [70, 95, 65, 70, 85], // 瑞士，自然风光绝佳，旅游设施待提升
+          name: "瑞士",
+          areaStyle: {
+            opacity: 0.3
+          }
+        },
+        {
+          value: [65, 70, 92, 90, 75], // 新加坡，旅游设施和交通出色，文化与自然相对普通
+          name: "新加坡",
+          areaStyle: {
+            opacity: 0.3
+          }
+        }
+      ]
+    }
+  ]
+};
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+  </script>
+
+
+<div id="main3" style="width: 600px;height:410px;"></div>
+<script type="text/javascript">
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('main3'));
+
+  // 指定图表的配置项和数据
+  var option;
+
+//展示数据
+const optionData = [];
+//扇形图颜色数据
+const colorList = [
+    { color1: 'rgba(0, 70, 130, 0.9)', color2: 'rgba(0, 75, 135, 1)' },
+    { color1: 'rgba(0, 75, 135, 0.9)', color2: 'rgba(0, 80, 140, 1)' },
+    { color1: 'rgba(0, 80, 140, 0.9)', color2: 'rgba(0, 85, 145, 1)' },
+    { color1: 'rgba(0, 85, 145, 0.9)', color2: 'rgba(0, 90, 150, 1)' },
+    { color1: 'rgba(0, 90, 150, 0.9)', color2: 'rgba(0, 95, 155, 1)' },
+    { color1: 'rgba(0, 95, 155, 0.9)', color2: 'rgba(0, 100, 160, 1)' },
+    { color1: 'rgba(0, 100, 160, 0.9)', color2: 'rgba(0, 105, 165, 1)' },
+    { color1: 'rgba(0, 105, 165, 0.9)', color2: 'rgba(0, 110, 170, 1)' },
+    { color1: 'rgba(0, 110, 170, 0.9)', color2: 'rgba(0, 115, 175, 1)' },
+    { color1: 'rgba(0, 115, 175, 0.9)', color2: 'rgba(0, 120, 180, 1)' },
+    { color1: 'rgba(0, 120, 180, 0.9)', color2: 'rgba(0, 125, 185, 1)' },
+    { color1: 'rgba(0, 125, 185, 0.9)', color2: 'rgba(0, 130, 190, 1)' }
+];
+//请求的数据
+const resultData = [
+    {
+        name: '1月',
+        value: 85,
+    },
+    {
+        name: '2月',
+        value: 90,
+    },
+    {
+        name: '3月',
+        value: 92.2,
+    },
+    {
+        name: '4月',
+        value: 70.5,
+    },
+    {
+        name: '5月',
+        value: 94,
+    },
+    {
+        name: '6月',
+        value: 86,
+    },
+    {
+        name: '7月',
+        value: 75,
+    },
+    {
+        name: '8月',
+        value: 83,
+    },
+    {
+        name: '9月',
+        value: 78,
+    },
+    {
+        name: '10月',
+        value: 95.6,
+    },
+    {
+        name: '11月',
+        value: 93.5,
+    },
+    {
+        name: '12月',
+        value: 80.4,
+    }
+];
+let sum = 0;
+resultData.forEach(item => {
+   sum += item.value;
+})
+resultData.forEach(item => {
+   optionData.push({ value: item.value, name: item.name });
+   optionData.push({ name: '', value: sum / 100, itemStyle: { color: 'transparent' } });
+})
+option = {
+  title: {
+      text: '全年各月旅游满意度',
+      left: 'center',
+      textStyle: {
+         fontWeight: 'bold', // 加粗
+         color: '#fff', // 颜色
+         textBorderColor: 'gery', // 描边颜色
+         textBorderWidth: 1 // 描边宽度
+      }
+   },
+   backgroundColor: "transparent",
+   //你的代码
+   legend: [
+      {
+         orient: 'vertical',
+         right: '35%',
+         top: '20%',
+         itemGap: 30,
+         textStyle: {
+            color: '#ffffff',
+            fontSize: 12,
+         },
+         data: ['1月', '2月', '3月', '4月', '5月', '6月'],
+      },
+      {
+         orient: 'vertical',
+         right: '20%',
+         top: '20%',
+         itemGap: 30,
+         textStyle: {
+            color: '#ffffff',
+            fontSize: 12,
+         },
+         data: ['7月', '8月', '9月', '10月', '11月', '12月'],
+      }
+   ],
+   tooltip: {
+      trigger: 'item',
+      formatter(params) {
+         let res = '';
+         const { marker, name, value } = params;
+         if (name !== '') {
+            res += `${marker}${name}:${value}%`
+         }
+         return res;
+      }
+   },
+   series: [
+      {
+         type: 'pie',
+         roseType: 'radius',
+         radius: ['20%', '60%'],
+         center: ['30%', '50%'],
+         label: {
+            position: 'inside',
+            formatter(item) {
+               if (item.name === '') {
+                  return '';
+               }
+               return `${item.value}%`;
+            },
+            textStyle: {
+               fontSize: 16,
+               color: '#ffffff'
+            }
+         },
+         labelLine: {
+            show: false,
+         },
+         itemStyle: {
+            normal: {
+               color(params) {
+                  return colorList[parseInt(params.dataIndex / 2)].color1;
+               }
+            }
+         },
+         z: 3,
+         data: optionData,
+      },
+      {
+         type: 'pie',
+         roseType: 'radius',
+         radius: ['20%', '62%'],
+         center: ['30%', '50%'],
+         label: {
+            show: false,
+         },
+         labelLine: {
+            show: false,
+         },
+         itemStyle: {
+            normal: {
+               color(params) {
+                  return colorList[parseInt(params.dataIndex / 2)].color2;
+               }
+            }
+         },
+         z: 2,
+         data: optionData,
+      }
+   ]
+};
+
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+</script>
+
+<div id="main4" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('main4'));
+
+  // 指定图表的配置项和数据
+  option = {
+    title: {
+      text: '每日旅游人数',
+      left: 'center',
+      textStyle: {
+         fontWeight: 'bold', // 加粗
+         color: '#fff', // 颜色
+         textBorderColor: 'gery', // 描边颜色
+         textBorderWidth: 1 // 描边宽度
+      }
+    },
+  xAxis: {
+    
+    type: 'category',
+    data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: [30, 45, 64, 84, 124, 185, 169],//条状柱的数据
+      label: {
+        show: true,
+        position: 'inside'
+      },
+      type: 'bar'
+    },{
+      data: [30, 45, 64, 84, 124, 185, 169],//折线的数据
+      type: 'line',
+      lineStyle: {
+      color: "#fff"//折线颜色
+      },
+      symbol: 'circle',
+      symbolSize: 1,
+      label: {
+      normal: {
+      position: "top",
+      show: true,
+      color:'#3779D2',//柱状条上的数字颜色
+      formatter(params){},
+      }
+      },
+showBackground: false,
+      
+    }
+    
+  ]
+};
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+</script>
+
+
+<div id="main5" style="width: 500px;height:300px;"></div>
+<script type="text/javascript">
+  // 基于准备好的dom，初始化echarts实例
+  var myChart = echarts.init(document.getElementById('main5'));
+
+  // 指定图表的配置项和数据
+  option = {
+    title: {
+      text: '页面浏览量',
+      left: 'center',
+      textStyle: {
+         fontWeight: 'bold', // 加粗
+         color: '#fff', // 颜色
+         textBorderColor: 'gery', // 描边颜色
+         textBorderWidth: 1 // 描边宽度
+      }
+   },
+    backgroundColor: 'transparent', //背景色
+    series: [
+        {
+            type: 'liquidFill', //水位图
+            radius: '80%', //显示比例
+            center: ['50%', '50%'], //中心点
+            amplitude: 20, //水波振幅
+            data: [0.5,.5,.5], // data个数代表波浪数
+            color: [
+                {
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 0,
+                    y2: 1,
+                    colorStops: [
+                        {
+                            offset: 0,
+                            color: '#446bf5',
+                        },
+                        {
+                            offset: 1,
+                            color: '#2ca3e2',
+                        },
+                    ],
+                    globalCoord: false,
+                },
+            ], //波浪颜色
+            backgroundStyle: {
+                borderWidth: 1, //外边框
+                borderColor: '#112165', //边框颜色
+                color: 'RGBA(51, 66, 127, 0.7)', //边框内部填充部分颜色
+            },
+            label: {
+                //标签设置
+                position: ['50%', '50%'],
+                formatter: '19827人', //显示文本,
+                textStyle: {
+                    fontSize: '52px', //文本字号,
+                    color: '#fff',
+                },
+            },
+            outline: {
+                // show: false
+                borderDistance: 0,
+                itemStyle: {
+                    borderWidth: 2,
+                    borderColor: '#112165',
+                },
+            },
+        },
+    ],
+};
+
+
+  // 使用刚指定的配置项和数据显示图表。
+  myChart.setOption(option);
+</script>
+
+  <header>
+    <nav>
+      <a class="nav-items" href="index1.html">Home</a>
+      <a class="nav-items" href="map.html">Map</a>
+      <a class="nav-items" href="math.html">Travel</a> 
+      <a class="nav-items active">Information</a>
+      <a class="nav-items" href="search.html">Search</a>
+    </nav>
+  </header>
+
+  <!-- 页面内容 -->
+  <div class="content">
+  </div>
+
+ 
+
+  <script>
+    const chatButton = document.getElementById('chat-button');
+    const chatPopup = document.getElementById('chat-popup');
+    const closeButton = document.getElementById('close-button');
+
+    // 点击按钮显示悬浮窗口
+    chatButton.addEventListener('click', function () {
+      chatPopup.style.display = 'block';
+    });
+
+    // 点击关闭按钮隐藏悬浮窗口
+    closeButton.addEventListener('click', function () {
+      chatPopup.style.display = 'none';
+    });
+  </script>
+  <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/cn/index.js"></script>
+  <script>
+    new CozeWebSDK.WebChatClient({
+      config: {
+        bot_id: '7496398082138210313',
+      },
+      componentProps: {
+        title: 'Coze',
+      },
+      auth: {
+        type: 'token',
+        token: 'pat_Kb2DjoBRsTO61NLBrNdH4uEovRfJAhpJaBDUL6X5WP5POb4wP8rDUCForyBsOl8a',
+        onRefreshToken: function () {
+          return 'pat_Kb2DjoBRsTO61NLBrNdH4uEovRfJAhpJaBDUL6X5WP5POb4wP8rDUCForyBsOl8a'
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

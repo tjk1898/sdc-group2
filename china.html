@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Page</title>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+  <!-- stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* 移除默认样式 */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 背景样式 */
+    body {
+      background-image: url('images/china.png');
+      background-size:auto;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;  /* 页面高度 */
+      position: relative;
+      overflow-y: scroll;
+    }
+
+    /* 磨砂白覆盖层 */
+    body::after {
+      content: '';  /* 内容为空 */
+      position: absolute; 
+      top: 0;    /* 覆盖层位于页面顶部 */
+      left: 0;    /* 覆盖层位于页面左侧 */
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);     /* 背景模糊 */
+      z-index: 1;      /* 覆盖层在最上层 */
+    }
+
+    /* 悬浮按钮样式 */
+    #chat-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007bff;
+      color: white;
+      padding: 25px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      font-size: 24px;
+    }
+
+    /* 悬浮窗口样式 */
+    #chat-popup {
+      display: none;
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 500px;
+      height: 600px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+    }
+
+    /* 关闭按钮样式 */
+    #close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    /* 标题样式 */
+    h1 {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: #333;
+      padding-top: 20px;
+    }
+
+/* 区块样式 */
+.region-block {
+  position: relative;
+  z-index: 2;  /* 将区块放在背景图片上方 */
+  background-color: rgba(255, 255, 255, 0.8);
+  margin: 34px auto; /* 进一步增加上下边距 */
+  padding: 40px 40px; /* 进一步增加垂直方向的内边距 */
+  width: 88%; /* 增加宽度 */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ 
+}
+/*文字样式*/
+.region-block p {
+  color: black; 
+  font-size: 19px;
+  line-height: 1.6;
+  padding-left: 450px;
+  text-indent: 2em;
+  text-align: left;
+  height: 170px; 
+}
+
+.region-block img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1; /* 将图片放在文字的上方 */
+  object-fit:cover;/* 图片适应容器大小 */
+  width: 400px; /* 图片宽度 */
+  max-height: fit-content;
+  height: 250px;
+ 
+}
+  
+    /* 跳转文字样式 */
+    .map-link {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding-bottom: 20px;
+    }
+
+    .map-link a {
+      color: white; /* 文字颜色变为白色 */
+      text-decoration: none; /* 去除下划线 */
+    }
+
+    .map-link a:hover {
+      text-decoration: none; /* 鼠标悬停时也不显示下划线 */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 标题 -->
+  <h1>中国旅游推荐</h1>
+
+  <!-- 垂直排列的大区快 -->
+  <div class="region-block">
+    <img src="./images/huadong.jpg"></img>
+    <p>上海以都市风情为核心，外滩万国建筑与陆家嘴摩天楼交相辉映，迪士尼乐园承载童话梦想，豫园老字号美食聚集。江苏的苏州园林（拙政园、狮子林）诠释“咫尺之内再造乾坤”的意境，南京夫子庙秦淮河灯火璀璨，无锡鼋头渚太湖樱花季如诗如画。浙江的杭州西湖四季皆景，乌镇西栅夜景展现水乡静谧，普陀山佛教圣地香火缭绕。安徽黄山以奇松、怪石、云海闻名，宏村白墙黛瓦映衬水墨田园。福建厦门鼓浪屿文艺清新，土楼（承启楼）彰显客家智慧，武夷山九曲溪竹筏漂流茶香萦绕。江西庐山云雾缭绕，三清山仙侠式丹霞地貌令人惊叹。山东泰山云海日出震撼人心，青岛红瓦绿树海滨风光兼具欧陆风情。</p>
+  </div>
+  <div class="region-block">
+    <img src="./images/huanan.jpg"></img>
+    <p>广东广州塔俯瞰都市天际线，丹霞山赤崖丹谷彰显地貌奇观；广西桂林漓江“百里画廊”如水墨长卷，崇左德天跨国瀑布气势磅礴。海南三亚蜈支洲岛海水清澈如宝石，五指山热带雨林徒步探秘黎族文化。福建厦门鼓浪屿的文艺小巷与土楼（如永定承启楼）的圆形奇迹形成对比，武夷山九曲溪竹筏漂流茶香萦绕。</p>
+  </div>
+  <div class="region-block">
+    <img src="./images/xibei.jpg"></img>
+    <p>陕西西安兵马俑、古城墙见证千年秦唐气象，华山奇险居五岳之首。甘肃敦煌莫高窟壁画飞天灵动，张掖丹霞七彩丘陵如火星地表，鸣沙山月牙泉驼铃悠扬。青海青海湖油菜花季湖光潋滟，茶卡盐湖“天空之镜”摄人心魄，祁连山草原骏马奔腾。宁夏中卫沙坡头黄河与沙漠交汇，腾格里沙漠星空露营独享寂静。新疆喀什老城烟火气浓郁，伊犁喀拉峻草原花海翻涌，天山天池雪峰倒映湖中。</p>
+  </div>
+
+  <!-- 跳转文字 -->
+  <div class="map-link">
+    <a href="map.html">Click to view map</a>
+  </div>
+
+
+
+  <script>
+    const chatButton = document.getElementById('chat-button');
+    const chatPopup = document.getElementById('chat-popup');
+    const closeButton = document.getElementById('close-button');
+
+    // 点击按钮显示悬浮窗口
+    chatButton.addEventListener('click', function () {
+      chatPopup.style.display = 'block';
+    });
+
+    // 点击关闭按钮隐藏悬浮窗口
+    closeButton.addEventListener('click', function () {
+      chatPopup.style.display = 'none';
+    });
+  </script>
+</body>
+
+</html>
